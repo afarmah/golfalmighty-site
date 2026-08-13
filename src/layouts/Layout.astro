@@ -70,8 +70,20 @@ const nav = [
     .reveal.visible { opacity:1; transform:translateY(0); }
 
     /* NAV */
-    .ga-nav { position:fixed; top:0; left:0; right:0; z-index:9999; padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:68px; transition:background 0.3s,backdrop-filter 0.3s,box-shadow 0.3s; }
-    .ga-nav.scrolled { background:rgba(13,17,23,0.95); backdrop-filter:blur(20px); box-shadow:0 1px 0 rgba(255,255,255,0.06); }
+    .ga-nav {
+      position:fixed; top:0; left:0; right:0; z-index:9999; padding:0 32px;
+      display:flex; align-items:center; justify-content:space-between;
+      height:68px;
+      background: rgba(13,17,23,0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+      transition:background 0.3s,backdrop-filter 0.3s,box-shadow 0.3s;
+    }
+    .ga-nav.scrolled {
+      background:rgba(13,17,23,0.98);
+      backdrop-filter:blur(20px);
+      box-shadow:0 1px 0 rgba(255,255,255,0.06);
+    }
     .ga-nav-logo img { height:40px; display:block; }
     .ga-nav-links { display:flex; align-items:center; gap:24px; list-style:none; }
     .ga-nav-links a { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.7); text-decoration:none; transition:color 0.2s; }
