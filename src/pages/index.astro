@@ -1,0 +1,388 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Home" description="Golf Almighty — Indoor Golf Simulators & Sports Bar. Two GTA locations in Brampton and Bolton. Open 24/7.">
+
+<style>
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+  @keyframes ticker { from{transform:translateX(0)}to{transform:translateX(-50%)} }
+  @keyframes glow { 0%,100%{opacity:0.5}50%{opacity:1} }
+
+  /* HERO */
+  .hero { position:relative; min-height:100vh; display:flex; align-items:center; background:var(--navy); overflow:hidden; }
+  .hero-video-wrap { position:absolute; inset:0; z-index:0; overflow:hidden; }
+  .hero-video-wrap iframe { position:absolute; top:50%; left:50%; width:100vw; height:56.25vw; min-height:100vh; min-width:177.78vh; transform:translate(-50%,-50%); border:0; pointer-events:none; }
+  .hero-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(135deg,rgba(13,17,23,0.82) 0%,rgba(13,17,23,0.65) 50%,rgba(13,17,23,0.75) 100%); }
+  .hero-glow { position:absolute; z-index:1; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle,rgba(45,184,75,0.12) 0%,transparent 70%); top:-100px; left:-100px; animation:glow 4s ease-in-out infinite; }
+  .hero-content { position:relative; z-index:2; max-width:1100px; margin:0 auto; padding:0 28px; width:100%; }
+  .hero-inner { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; min-height:100vh; padding:100px 0 80px; max-width:680px; }
+  .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(45,184,75,0.12); border:1px solid rgba(45,184,75,0.35); color:var(--green); font-size:0.62rem; font-weight:800; letter-spacing:0.2em; text-transform:uppercase; padding:7px 16px; border-radius:50px; margin-bottom:28px; animation:fadeUp 0.6s ease both; }
+  .hero-badge svg { width:11px; height:11px; stroke:var(--green); fill:none; }
+  .hero-title { font-size:clamp(2.8rem,5.5vw,5rem); font-weight:900; line-height:1.02; color:#fff; letter-spacing:-0.035em; margin-bottom:20px; animation:fadeUp 0.65s 0.08s ease both; }
+  .hero-title .accent { color:var(--green); text-shadow:0 0 40px rgba(45,184,75,0.4); display:block; }
+  .hero-desc { font-size:1rem; color:rgba(255,255,255,0.6); line-height:1.85; max-width:520px; margin-bottom:36px; animation:fadeUp 0.65s 0.16s ease both; }
+  .hero-btns { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:52px; animation:fadeUp 0.65s 0.24s ease both; }
+  .hero-stats { display:flex; gap:36px; animation:fadeUp 0.65s 0.32s ease both; padding-top:32px; border-top:1px solid rgba(255,255,255,0.08); }
+  .hero-stat-val { font-size:1.9rem; font-weight:900; color:var(--green); letter-spacing:-0.03em; line-height:1; margin-bottom:4px; }
+  .hero-stat-lbl { font-size:0.62rem; font-weight:600; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.12em; }
+
+  /* TICKER */
+  .ticker { background:var(--green); padding:14px 0; overflow:hidden; }
+  .ticker-inner { display:flex; width:max-content; animation:ticker 28s linear infinite; }
+  .ticker-item { display:flex; align-items:center; gap:10px; white-space:nowrap; padding:0 36px; font-size:0.72rem; font-weight:800; letter-spacing:0.16em; text-transform:uppercase; color:#fff; }
+  .ticker-item::after { content:'⛳'; font-size:0.9rem; }
+
+  /* PROMOTIONS */
+  .promos { padding:88px 0; background:var(--off); }
+  .promos-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:52px; }
+  .promo-card { border-radius:var(--rl); overflow:hidden; position:relative; aspect-ratio:1/1; box-shadow:0 2px 14px rgba(0,0,0,0.1); transition:transform 0.25s,box-shadow 0.25s; text-decoration:none; display:block; }
+  .promo-card:hover { transform:translateY(-5px) scale(1.01); box-shadow:0 16px 40px rgba(0,0,0,0.15); }
+  .promo-card img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s; }
+  .promo-card:hover img { transform:scale(1.06); }
+  .promo-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%); }
+  .promo-label { position:absolute; bottom:18px; left:18px; font-size:0.7rem; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#fff; background:var(--green); padding:5px 12px; border-radius:50px; }
+
+  /* RATES & MEMBERSHIP COMBINED */
+  .play { padding:96px 0; background:var(--navy); position:relative; overflow:hidden; }
+  .play::before { content:''; position:absolute; top:-200px; right:-200px; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle,rgba(45,184,75,0.07) 0%,transparent 70%); pointer-events:none; }
+  .play-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:52px; }
+  .play-card { border-radius:var(--rxl); padding:36px; border:1px solid rgba(255,255,255,0.08); position:relative; overflow:hidden; transition:transform 0.22s,border-color 0.22s; background:rgba(255,255,255,0.03); }
+  .play-card:hover { transform:translateY(-5px); border-color:rgba(45,184,75,0.35); }
+  .play-card-featured { background:linear-gradient(135deg,rgba(45,184,75,0.14) 0%,rgba(31,143,56,0.06) 100%); border-color:rgba(45,184,75,0.28); }
+  .play-badge { display:inline-flex; font-size:0.58rem; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; padding:4px 10px; border-radius:50px; margin-bottom:20px; }
+  .play-badge-rates { background:rgba(45,184,75,0.12); color:var(--green); border:1px solid rgba(45,184,75,0.3); }
+  .play-badge-mem { background:var(--green); color:#fff; }
+  .play-icon { width:56px; height:56px; border-radius:var(--rl); display:flex; align-items:center; justify-content:center; margin-bottom:22px; }
+  .play-icon-rates { background:rgba(255,255,255,0.05); }
+  .play-icon-mem { background:rgba(45,184,75,0.15); }
+  .play-icon svg { width:26px; height:26px; stroke:var(--green); fill:none; }
+  .play-title { font-size:1.3rem; font-weight:900; color:#fff; letter-spacing:-0.02em; margin-bottom:8px; }
+  .play-desc { font-size:0.88rem; color:rgba(255,255,255,0.5); line-height:1.8; margin-bottom:28px; }
+  .play-from { margin-bottom:24px; }
+  .play-from-label { font-size:0.6rem; font-weight:800; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:4px; }
+  .play-from-price { font-size:3.2rem; font-weight:900; color:#fff; letter-spacing:-0.04em; line-height:1; }
+  .play-from-price span { font-size:1rem; font-weight:500; color:rgba(255,255,255,0.4); }
+  .play-highlights { list-style:none; display:flex; flex-direction:column; gap:10px; margin-bottom:32px; }
+  .play-highlights li { display:flex; align-items:center; gap:10px; font-size:0.84rem; color:rgba(255,255,255,0.6); }
+  .play-highlights li svg { width:13px; height:13px; stroke:var(--green); fill:none; flex-shrink:0; }
+
+  /* HOW IT WORKS */
+  .how { padding:96px 0; background:var(--white); }
+  .how-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:52px; }
+  .how-card { background:var(--off); border:1px solid var(--border); border-radius:var(--rl); padding:36px 28px; position:relative; overflow:hidden; transition:border-color 0.22s,transform 0.22s,box-shadow 0.22s; }
+  .how-card:hover { border-color:var(--green-bd); transform:translateY(-5px); box-shadow:0 12px 40px rgba(0,0,0,0.08); }
+  .how-num { font-size:5rem; font-weight:900; color:rgba(0,0,0,0.04); position:absolute; top:-8px; right:16px; line-height:1; }
+  .how-icon { width:52px; height:52px; background:var(--green-bg); border:1px solid var(--green-bd); border-radius:var(--rl); display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+  .how-icon svg { width:24px; height:24px; stroke:var(--green); fill:none; }
+  .how-title { font-size:1rem; font-weight:900; color:var(--text); letter-spacing:-0.01em; margin-bottom:10px; }
+  .how-desc { font-size:0.85rem; color:var(--muted); line-height:1.8; }
+
+  /* INCLUDED */
+  .included { padding:96px 0; background:var(--off); }
+  .included-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:52px; }
+  .included-item { display:flex; align-items:flex-start; gap:18px; background:var(--white); border:1px solid var(--border); border-radius:var(--rl); padding:26px 24px; transition:border-color 0.22s,transform 0.22s; }
+  .included-item:hover { border-color:var(--green-bd); transform:translateY(-3px); }
+  .included-icon { width:46px; height:46px; background:var(--green-bg); border:1px solid var(--green-bd); border-radius:var(--r); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .included-icon svg { width:20px; height:20px; stroke:var(--green); fill:none; }
+  .included-title { font-size:0.88rem; font-weight:800; color:var(--text); margin-bottom:6px; }
+  .included-desc { font-size:0.82rem; color:var(--muted); line-height:1.75; }
+
+  /* GALLERY */
+  .gallery { padding:96px 0; background:var(--navy2); }
+  .gallery-grid { display:grid; grid-template-columns:2fr 1fr 1fr; grid-template-rows:auto auto; gap:12px; margin-top:52px; }
+  .gallery-item { border-radius:var(--r); overflow:hidden; }
+  .gallery-item:first-child { grid-row:1/3; }
+  .gallery-item img { width:100%; height:100%; object-fit:cover; display:block; min-height:200px; transition:transform 0.45s; filter:brightness(0.82); }
+  .gallery-item:hover img { transform:scale(1.04); filter:brightness(1); }
+
+  /* LOCATIONS */
+  .locations { padding:96px 0; background:var(--white); }
+  .locations-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:52px; }
+  .loc-card { background:var(--off); border:1px solid var(--border2); border-radius:var(--rl); overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,0.07); transition:transform 0.22s,box-shadow 0.22s; }
+  .loc-card:hover { transform:translateY(-4px); box-shadow:0 10px 40px rgba(0,0,0,0.12); }
+  .loc-card-top { background:var(--navy); padding:30px 28px 26px; position:relative; overflow:hidden; }
+  .loc-card-top::after { content:''; position:absolute; top:-40px; right:-40px; width:140px; height:140px; border-radius:50%; background:rgba(45,184,75,0.08); }
+  .loc-name { font-size:1.5rem; font-weight:900; color:#fff; letter-spacing:-0.02em; margin-bottom:6px; }
+  .loc-address { font-size:0.8rem; color:rgba(255,255,255,0.4); }
+  .loc-card-body { padding:26px 28px; }
+  .loc-detail { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); font-size:0.84rem; }
+  .loc-detail:last-child { border-bottom:none; }
+  .loc-detail svg { width:14px; height:14px; stroke:var(--green); fill:none; flex-shrink:0; margin-top:2px; }
+  .loc-detail-label { font-weight:800; color:var(--text); margin-bottom:2px; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; }
+  .loc-detail-val { color:var(--muted); font-weight:500; line-height:1.6; }
+
+  /* CTA */
+  .cta-banner { padding:96px 28px; text-align:center; background:var(--navy); position:relative; overflow:hidden; }
+  .cta-banner::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(45,184,75,0.1) 0%,transparent 65%); pointer-events:none; }
+  .cta-banner::after { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:100px; height:3px; background:linear-gradient(90deg,transparent,var(--green),transparent); }
+  .cta-banner h2 { font-size:clamp(2rem,5vw,3.8rem); font-weight:900; color:#fff; letter-spacing:-0.03em; line-height:1.05; margin-bottom:14px; position:relative; z-index:1; }
+  .cta-banner h2 span { color:var(--green); }
+  .cta-banner p { font-size:0.95rem; color:rgba(255,255,255,0.5); max-width:500px; margin:0 auto 36px; line-height:1.85; position:relative; z-index:1; }
+  .cta-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+
+  @media(max-width:960px){
+    .play-grid{grid-template-columns:1fr}
+    .how-grid{grid-template-columns:1fr 1fr}
+    .promos-grid{grid-template-columns:1fr 1fr}
+    .included-grid{grid-template-columns:1fr}
+    .locations-grid{grid-template-columns:1fr}
+    .gallery-grid{grid-template-columns:1fr 1fr}
+    .gallery-item:first-child{grid-row:auto;grid-column:1/-1}
+  }
+  @media(max-width:600px){
+    .how-grid,.promos-grid{grid-template-columns:1fr}
+    .gallery-grid{grid-template-columns:1fr}
+    .hero-stats{flex-direction:column;gap:20px}
+  }
+</style>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-video-wrap">
+    <iframe src="https://www.youtube.com/embed/oyT1HWRn0yg?autoplay=1&mute=1&loop=1&playlist=oyT1HWRn0yg&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Open 24/7 · Brampton & Bolton, GTA
+      </div>
+      <h1 class="hero-title">
+        Indoor Golf That
+        <span class="accent">Elevates</span>
+        Your Game
+      </h1>
+      <p class="hero-desc">Experience 400+ world-famous virtual courses on Trackman and Uneekor simulators. Whether you're a seasoned golfer or total beginner — walk in, swing, and have a great time.</p>
+      <div class="hero-btns">
+        <a href="https://albaplay.com/en/venue/golf-almighty-brampton" class="btn btn-green">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="12 5 19 12 12 19"/></svg>
+          Book Brampton
+        </a>
+        <a href="https://albaplay.com/en/venue/golf-almighty-bolton" class="btn btn-outline-white">Book Bolton</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-val">400+</div><div class="hero-stat-lbl">Virtual Courses</div></div>
+        <div><div class="hero-stat-val">24/7</div><div class="hero-stat-lbl">Simulator Access</div></div>
+        <div><div class="hero-stat-val">2</div><div class="hero-stat-lbl">GTA Locations</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Summer Kids & Family Packages Now Available</span>
+    <span class="ticker-item">20% Off Wednesdays</span>
+    <span class="ticker-item">Ladies Play Free During Bar Hours</span>
+    <span class="ticker-item">Summer Camp 2026 — Register Now</span>
+    <span class="ticker-item">Golf On The Go — Mobile Simulator Rentals</span>
+    <span class="ticker-item">Memberships Starting from $59/month</span>
+    <span class="ticker-item">Summer Kids & Family Packages Now Available</span>
+    <span class="ticker-item">20% Off Wednesdays</span>
+    <span class="ticker-item">Ladies Play Free During Bar Hours</span>
+    <span class="ticker-item">Summer Camp 2026 — Register Now</span>
+    <span class="ticker-item">Golf On The Go — Mobile Simulator Rentals</span>
+    <span class="ticker-item">Memberships Starting from $59/month</span>
+  </div>
+</div>
+
+<!-- CURRENT PROMOTIONS -->
+<section class="promos">
+  <div class="container">
+    <div class="eyebrow">What's On</div>
+    <h2 class="section-title">Current <span>Promotions</span></h2>
+    <p class="section-body">Special events, packages, and deals happening now at Golf Almighty.</p>
+    <div class="promos-grid">
+      <a href="https://golfalmighty.ca/summerpackages" class="promo-card reveal"><img src="https://golfalmighty.ca/wp-content/uploads/2026/06/Summer-Packages.png" alt="Summer Family Packages" loading="lazy"/><div class="promo-overlay"></div><span class="promo-label">Family Packages</span></a>
+      <a href="https://golfalmighty.ca/summercamp" class="promo-card reveal"><img src="https://golfalmighty.ca/wp-content/uploads/2026/05/Summer-Camp-2026.png" alt="Summer Camp 2026" loading="lazy"/><div class="promo-overlay"></div><span class="promo-label">Summer Camp 2026</span></a>
+      <div class="promo-card reveal" style="cursor:default;"><img src="https://golfalmighty.ca/wp-content/uploads/2026/03/Ladies-play-free-during-bar-hours.png" alt="Ladies Play Free" loading="lazy"/><div class="promo-overlay"></div><span class="promo-label">Ladies Play Free</span></div>
+      <div class="promo-card reveal" style="cursor:default;"><img src="https://golfalmighty.ca/wp-content/uploads/2026/03/Kids-play-free-on-sunday.png" alt="Kids Play Free Sundays" loading="lazy"/><div class="promo-overlay"></div><span class="promo-label">Kids Play Free Sundays</span></div>
+      <div class="promo-card reveal" style="cursor:default;"><img src="https://golfalmighty.ca/wp-content/uploads/2026/03/20-off-wednesdays.png" alt="20% Off Wednesdays" loading="lazy"/><div class="promo-overlay"></div><span class="promo-label">20% Off Wednesdays</span></div>
+      <a href="https://golfalmighty.ca/club" class="promo-card reveal"><img src="https://golfalmighty.ca/wp-content/uploads/2026/05/create-play-inspire.png" alt="Ambassadors & Creators" loading="lazy"/><div class="promo-overlay"></div><span class="promo-label">Ambassadors & Creators</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- RATES + MEMBERSHIP COMBINED -->
+<section class="play">
+  <div class="container">
+    <div class="eyebrow-dark">Play Your Way</div>
+    <h2 class="section-title section-title-dark">Book a Bay or <span>Join as a Member</span></h2>
+    <p class="section-body section-body-dark">Drop in whenever you want, or save big with a monthly membership. Two simple ways to play.</p>
+    <div class="play-grid">
+
+      <!-- RATES CARD -->
+      <div class="play-card reveal">
+        <span class="play-badge play-badge-rates">Pay As You Go</span>
+        <div class="play-icon play-icon-rates">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="play-title">Simulator Rates</div>
+        <p class="play-desc">No commitment needed. Book a bay online, show up, and play. Available at both Brampton and Bolton locations any time of day or night.</p>
+        <div class="play-from">
+          <div class="play-from-label">Starting from</div>
+          <div class="play-from-price">$15<span>/hr</span></div>
+        </div>
+        <ul class="play-highlights">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Off-peak from $15/hr · Peak from $26/hr</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Uneekor, Trackman iO & Trackman bays</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Same-day booking available · Open 24/7</li>
+        </ul>
+        <a href="/rates" class="btn btn-outline-white">
+          View All Rates
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <!-- MEMBERSHIP CARD -->
+      <div class="play-card play-card-featured reveal">
+        <span class="play-badge play-badge-mem">Save More · Play More</span>
+        <div class="play-icon play-icon-mem">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="play-title">Memberships</div>
+        <p class="play-desc">Play more and pay less with a monthly membership. Get priority booking, unlimited access, and exclusive member perks at both locations.</p>
+        <div class="play-from">
+          <div class="play-from-label">Starting from</div>
+          <div class="play-from-price">$59<span>/mo</span></div>
+        </div>
+        <ul class="play-highlights">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>6 plans from $59 to $219/month</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Uneekor, Trackman iO & Trackman plans</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Priority booking · Brampton & Bolton</li>
+        </ul>
+        <a href="/membership" class="btn btn-green">
+          View Memberships
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="container">
+    <div class="eyebrow">Simple Process</div>
+    <h2 class="section-title">How It <span>Works</span></h2>
+    <p class="section-body">Getting on the simulator is effortless. Three steps and you're swinging on world-famous courses.</p>
+    <div class="how-grid">
+      <div class="how-card reveal">
+        <div class="how-num">1</div>
+        <div class="how-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="how-title">Choose Your Bay & Time</div>
+        <p class="how-desc">Pick your preferred simulator bay, date, and duration. Bring your own clubs or rent from us. Golf balls always provided.</p>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">2</div>
+        <div class="how-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="how-title">Book & Pay Online</div>
+        <p class="how-desc">Complete your booking securely online. All major cards, Apple Pay, and Android Pay accepted. Instant confirmation.</p>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">3</div>
+        <div class="how-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="how-title">Walk In & Play</div>
+        <p class="how-desc">You'll receive a secure Kisi door-access link by email. Your window opens 15 minutes before your slot. Swing away.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="included">
+  <div class="container">
+    <div class="eyebrow">The Full Experience</div>
+    <h2 class="section-title">What's <span>Included</span></h2>
+    <p class="section-body">Everything you get when you book a bay at Golf Almighty — no hidden extras.</p>
+    <div class="included-grid">
+      <div class="included-item reveal">
+        <div class="included-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div><div class="included-title">400+ Virtual Courses</div><div class="included-desc">Play St Andrews, Pebble Beach, Augusta, and hundreds more — all rendered in stunning detail.</div></div>
+      </div>
+      <div class="included-item reveal">
+        <div class="included-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="included-title">Open 24/7</div><div class="included-desc">Book any time, day or night. Your secure Kisi door access link works at any hour.</div></div>
+      </div>
+      <div class="included-item reveal">
+        <div class="included-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div>
+        <div><div class="included-title">Sports Bar On-Site</div><div class="included-desc">Enjoy drinks, food, and great vibes during bar hours. Non-golfers welcome too.</div></div>
+      </div>
+      <div class="included-item reveal">
+        <div class="included-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="included-title">Transparent Pricing</div><div class="included-desc">Off-peak from $15/hr. No membership required, no hidden fees. What you see is what you pay.</div></div>
+      </div>
+      <div class="included-item reveal">
+        <div class="included-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div><div class="included-title">All Skill Levels Welcome</div><div class="included-desc">Never picked up a club? No problem. Our simulators work for complete beginners and scratch golfers alike.</div></div>
+      </div>
+      <div class="included-item reveal">
+        <div class="included-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="included-title">Two GTA Locations</div><div class="included-desc">Brampton at 3 Chapel St and Bolton at 18 King St E. Same great experience at both spots.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery">
+  <div class="container">
+    <div class="eyebrow-dark">Inside Golf Almighty</div>
+    <h2 class="section-title section-title-dark">Our <span>Gallery</span></h2>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal"><img src="https://golfalmighty.ca/wp-content/uploads/2025/10/DSC6096-scaled.jpg" alt="Golf Almighty" loading="lazy" style="min-height:420px;"/></div>
+      <div class="gallery-item reveal"><img src="https://golfalmighty.ca/wp-content/uploads/2025/10/12-scaled.jpg" alt="Golf Almighty" loading="lazy"/></div>
+      <div class="gallery-item reveal"><img src="https://golfalmighty.ca/wp-content/uploads/2025/10/14-scaled.jpg" alt="Golf Almighty" loading="lazy"/></div>
+      <div class="gallery-item reveal"><img src="https://golfalmighty.ca/wp-content/uploads/2025/10/DSC6128-scaled.jpg" alt="Golf Almighty" loading="lazy"/></div>
+      <div class="gallery-item reveal"><img src="https://golfalmighty.ca/wp-content/uploads/2025/10/DSC7781-scaled.jpg" alt="Golf Almighty" loading="lazy"/></div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATIONS -->
+<section class="locations">
+  <div class="container">
+    <div class="eyebrow">Find Us</div>
+    <h2 class="section-title">Two <span>Locations</span></h2>
+    <p class="section-body">Serving Brampton and Bolton. Book your nearest location online — open 24/7.</p>
+    <div class="locations-grid">
+      <div class="loc-card reveal">
+        <div class="loc-card-top"><div class="loc-name">Brampton</div><div class="loc-address">3 Chapel St, Brampton, ON L6Y 1L9</div></div>
+        <div class="loc-card-body">
+          <div class="loc-detail"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><div><div class="loc-detail-label">Simulator Hours</div><div class="loc-detail-val">Open 24/7</div></div></div>
+          <div class="loc-detail"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/></svg><div><div class="loc-detail-label">Simulators</div><div class="loc-detail-val">Uneekor Tracker · Trackman iO · Trackman</div></div></div>
+          <div style="margin-top:20px;"><a href="https://albaplay.com/en/venue/golf-almighty-brampton" class="btn btn-green" style="width:100%;justify-content:center;">Book Brampton</a></div>
+        </div>
+      </div>
+      <div class="loc-card reveal">
+        <div class="loc-card-top"><div class="loc-name">Bolton</div><div class="loc-address">18 King St E, Bolton, ON L7E 1E8</div></div>
+        <div class="loc-card-body">
+          <div class="loc-detail"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><div><div class="loc-detail-label">Simulator Hours</div><div class="loc-detail-val">Open 24/7</div></div></div>
+          <div class="loc-detail"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/></svg><div><div class="loc-detail-label">Simulators</div><div class="loc-detail-val">Trackman iO · Ultra Private Lounge</div></div></div>
+          <div style="margin-top:20px;"><a href="https://albaplay.com/en/venue/golf-almighty-bolton" class="btn btn-green" style="width:100%;justify-content:center;">Book Bolton</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-banner">
+  <h2>Ready to <span>Swing?</span></h2>
+  <p>Book your bay online in minutes. 400+ virtual courses, open 24/7, no tee time required.</p>
+  <div class="cta-btns">
+    <a href="https://albaplay.com/en/venue/golf-almighty-brampton" class="btn btn-green">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="12 5 19 12 12 19"/></svg>
+      Book Brampton
+    </a>
+    <a href="https://albaplay.com/en/venue/golf-almighty-bolton" class="btn btn-outline-white">Book Bolton</a>
+    <a href="/gift-card" class="btn btn-outline-white">Buy a Gift Card</a>
+  </div>
+</section>
+
+</Layout>
